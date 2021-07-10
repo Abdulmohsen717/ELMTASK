@@ -5,6 +5,9 @@ import com.elm.UserPortal.UserPortal.Models.User;
 import com.elm.UserPortal.UserPortal.Repositories.PrivilegeRepository;
 import com.elm.UserPortal.UserPortal.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +24,17 @@ public class UserServiceImplementation implements UserService {
         String pass = new BCryptPasswordEncoder().encode(user.getPassword());
         user.setPassword(pass);
         Privilege privilege = new Privilege();
-        privilege.setAuthorityName("USER");
+        privilege.setAuthorityName("ROLE_USER");
         privilege.setUserPrivileges(user);
         privilegeRepository.save(privilege);
         return userRepository.save(user);
+    }
+
+    @Override
+    public User findUserByUsername(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user == null)
+            throw new UsernameNotFoundException(username);
+        return user;
     }
 }

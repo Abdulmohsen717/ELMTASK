@@ -17,7 +17,7 @@ public class Privilege {
     //------------------------
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "UserID")
+    @JoinColumn(name = "Username")
     private User userPrivileges;
 
     public Privilege() {}

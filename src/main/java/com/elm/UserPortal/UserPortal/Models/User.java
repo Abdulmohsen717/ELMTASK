@@ -8,10 +8,6 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "UserID")
-    private int userID;
-
     @Column(unique = true, name = "Username")
     private String username;
 
@@ -32,26 +28,25 @@ public class User {
     @OneToMany(mappedBy = "userPrivileges", cascade = CascadeType.ALL)
     private List<Privilege> privileges = new ArrayList<>();
 
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+    private List<Article> articles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
+
     public User() {
 
     }
 
-    public User(int userID, String username, String password, String mobileNumber, String email, boolean enabled, List<Privilege> privileges) {
-        this.userID = userID;
+    public User(String username, String password, String mobileNumber, String email, boolean enabled, List<Privilege> privileges, List<Article> articles, List<Comment> comments) {
         this.username = username;
         this.password = password;
         this.mobileNumber = mobileNumber;
         this.email = email;
         this.enabled = enabled;
         this.privileges = privileges;
-    }
-
-    public int getUserID() {
-        return userID;
-    }
-
-    public void setUserID(int userID) {
-        this.userID = userID;
+        this.articles = articles;
+        this.comments = comments;
     }
 
     public String getUsername() {
@@ -100,5 +95,21 @@ public class User {
 
     public void setPrivileges(List<Privilege> privileges) {
         this.privileges = privileges;
+    }
+
+    public List<Article> getArticles() {
+        return articles;
+    }
+
+    public void setArticles(List<Article> articles) {
+        this.articles = articles;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }
