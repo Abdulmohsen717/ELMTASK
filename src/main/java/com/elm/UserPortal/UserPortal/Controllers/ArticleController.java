@@ -28,7 +28,7 @@ public class ArticleController {
     @Autowired
     private CommentService commentService;
 
-    //@PreAuthorize("hasAnyAuthority('USER')")
+    @PreAuthorize("hasAnyAuthority('USER')")
     @RequestMapping(value = "/article/{author}", method = RequestMethod.POST)
     public ResponseEntity addArticle(@RequestBody Article article, @PathVariable("author") String author) {
         articleService.addArticle(article, author);
@@ -47,13 +47,14 @@ public class ArticleController {
         return ResponseEntity.ok(articleService.findArticles(pageRequest));
     }
 
-
+    @PreAuthorize("hasAnyAuthority('USER')")
     @RequestMapping(value = "/article/{id}/{author}", method = RequestMethod.DELETE)
     public ResponseEntity deleteArticle(@PathVariable("id") int articleID, @PathVariable("author") String author) {
         articleService.deleteArticle(articleID, author);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyAuthority('USER')")
     @RequestMapping(value = "/article/{id}/comment/{user}", method = RequestMethod.POST)
     public ResponseEntity addComment(@RequestBody Comment comment, @PathVariable("id") int articleID, @PathVariable("user") String user) {
         commentService.addComment(comment, articleID, user);
@@ -65,24 +66,28 @@ public class ArticleController {
         return ResponseEntity.ok(commentService.getArticleComments(articleID));
     }
 
+    @PreAuthorize("hasAnyAuthority('USER')")
     @RequestMapping(value = "/article/{id}/like", method = RequestMethod.PUT)
     public ResponseEntity addLike(@PathVariable("id") int articleID) {
         articleService.putLike(articleID);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyAuthority('USER')")
     @RequestMapping(value = "/article/{id}/dislike", method = RequestMethod.PUT)
     public ResponseEntity addDislike(@PathVariable("id") int articleID) {
         articleService.putDislike(articleID);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @RequestMapping(value = "/article/{id}/disable", method = RequestMethod.PUT)
     public ResponseEntity makeArticleDisabled(@PathVariable("id") int articleID) {
         articleService.disableArticle(articleID);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     @RequestMapping(value = "/article/{id}/enable", method = RequestMethod.PUT)
     public ResponseEntity makeArticleEnabled(@PathVariable("id") int articleID) {
         articleService.enableArticle(articleID);
